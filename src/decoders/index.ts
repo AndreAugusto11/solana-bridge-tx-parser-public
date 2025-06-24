@@ -3,5 +3,13 @@ import { decodeTokenInstruction } from "./token";
 import { decodeToken2022Instruction } from "./token22";
 import { decodeAssociatedTokenInstruction } from "./associated";
 import { decodeComputeBudgetInstruction } from "./compute.budget";
+import { decodeMayanInstruction } from "./mayan";
 
-export { decodeSystemInstruction, decodeTokenInstruction, decodeToken2022Instruction, decodeAssociatedTokenInstruction, decodeComputeBudgetInstruction };
+export {
+	decodeSystemInstruction,
+	decodeTokenInstruction,
+	decodeToken2022Instruction,
+	decodeAssociatedTokenInstruction,
+	decodeComputeBudgetInstruction,
+	decodeMayanInstruction,
+};

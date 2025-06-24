@@ -373,6 +373,8 @@ function convertDefinedTypeArg(arg: LegacyIdlDefinedTypeArg): any {
 export function convertLegacyIdlToV30(idl: any, programAddress?: string): Idl {
 	const spec = idl.metadata?.spec;
 
+	console.log(`Converting legacy IDL to v3.0, spec: ${spec ?? "unknown"}`);
+
 	if (spec) {
 		switch (spec) {
 			case "0.1.0":

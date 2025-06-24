@@ -4,8 +4,10 @@ import { SystemProgram } from "@coral-xyz/anchor";
 import { AssociatedTokenProgram } from "./ata";
 import { ComputeBudget } from "./compute.budget";
 import { SplToken22 } from "./spl-token-22.program";
+import { Mayan } from "./mayan.program";
 
 export type SplTokenIdl = ReturnType<typeof splTokenProgram>["idl"];
+export type MayanIdl = Mayan;
 export type SystemProgramIdl = SystemProgram;
 export type SplToken22Idl = SplToken22;
 export type ComputeBudgetIdl = ComputeBudget;

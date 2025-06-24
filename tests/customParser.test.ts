@@ -7,6 +7,7 @@ function customParser(instruction: TransactionInstruction): ParsedCustomInstruct
 	let args: unknown;
 	let keys: ParsedAccount[];
 	let name: string;
+
 	switch (instruction.data[0]) {
 		case 0:
 			args = { message: instruction.data.slice(1).toString("utf8") };
@@ -32,8 +33,8 @@ function customParser(instruction: TransactionInstruction): ParsedCustomInstruct
 
 function customTest() {
 	const connection = new Connection(clusterApiUrl("devnet"));
-	const ix0Tx = "2QU8jyEde9qbvtrYBJJZ2iBubqodmQRSoq2pfomHdGYgTgXwuncappiet8ojGGRdEkzkhW8sXdyfCxwuGHaHYegC";
-	const ix1Tx = "2FQ3jpUb5Qx1jSrT1C9wkcbhbaumJ8Z15c9L3gENdaeVCpavz2VHEwivVABpRQPgnUspGmqUSuSwsyzDagERXKE1";
+	const ix0Tx = "5xEeZMdrWVG7i8Fbcbu718FtbgSbXsK9c4GPBv21W2e35vP4DdkVghqH4p8dPKdmroUzNe2mBkctm4RAxaVbo78G";
+	const ix1Tx = "5xEeZMdrWVG7i8Fbcbu718FtbgSbXsK9c4GPBv21W2e35vP4DdkVghqH4p8dPKdmroUzNe2mBkctm4RAxaVbo78G";
 	const parser = new SolanaParser([]);
 
 	it("can take custom parser", () => {
@@ -44,17 +45,17 @@ function customTest() {
 		const parsed = await parser.parseTransactionByHash(connection, ix0Tx);
 		if (!parsed) return Promise.reject("failed to get/parse tx");
 		assert.equal(parsed[0].name, "echo");
-		assert.equal((parsed[0].args as { message: string }).message, "test echo message");
+		assert.equal((parsed[0].args as { message: string }).message, "ewjlkdewjd;lkewjd;ekjdqe");
 	});
 
 	it("can parse instruction 1", async () => {
 		const parsed = await parser.parseTransactionByHash(connection, ix1Tx);
 		if (!parsed) return Promise.reject("failed to get/parse tx");
 
-		assert.equal(parsed[0].name, "sum");
-		const args = parsed[0].args as { a: bigint; b: bigint };
-		assert.equal(args.a, BigInt(11));
-		assert.equal(args.b, BigInt(12));
+		assert.equal(parsed[1].name, "sum");
+		const args = parsed[1].args as { a: bigint; b: bigint };
+		assert.equal(args.a, BigInt(1));
+		assert.equal(args.b, BigInt(2));
 	});
 }
 
