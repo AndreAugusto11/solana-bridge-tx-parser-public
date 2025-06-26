@@ -1,5 +1,5 @@
 import { BN, Idl, IdlTypes, DecodeType, BorshInstructionCoder, BorshEventCoder } from "@coral-xyz/anchor";
-import { AccountMeta, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { AccountMeta, PublicKey, Transaction, TransactionInstruction, VersionedTransactionResponse } from "@solana/web3.js";
 
 /**
  * Context of logs for specific instruction
@@ -15,6 +15,11 @@ export type ProgramLogContext = {
 	instructionIndex: number;
 	invokeResult?: string;
 	unitsConsumed?: number;
+};
+
+export type ParsedTransaction = {
+	transaction: VersionedTransactionResponse;
+	instructions: ParsedInstruction<Idl, string>[] | null;
 };
 
 export type TransactionWithLogs = {

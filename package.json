@@ -25,6 +25,7 @@
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
   "scripts": {
+    "build-start-server": "tsc --outDir dist && node ./dist/src/server.js",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:node": "tsc -p tsconfig.cjs.json",
     "build": "npm run build:esm && npm run build:node",
@@ -53,6 +54,7 @@
     "@types/bn.js": "^5.1.0",
     "@types/bs58": "^4.0.4",
     "@types/chai": "^4.3.0",
+    "@types/express": "^5.0.3",
     "@types/mocha": "^9.0.0",
     "@types/node": "^17.0.2",
     "chai": "^4.3.4",
@@ -81,8 +83,11 @@
     "@solana/spl-token": "^0.4.9",
     "@solana/spl-type-length-value": "0.2.0",
     "@solana/web3.js": "^1.98.0",
+    "body-parser": "^2.2.0",
     "buffer": "6.0.3",
-    "ethers": "^6.14.4"
+    "dotenv": "^16.5.0",
+    "ethers": "^6.14.4",
+    "express": "^5.1.0"
   },
   "peerDependencies": {
     "@solana/buffer-layout": "^4.0.0",

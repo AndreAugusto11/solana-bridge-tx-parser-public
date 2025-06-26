@@ -3,7 +3,13 @@
     "compilerOptions": {
       "moduleResolution": "node",
       "module": "commonjs",
-      "types": ["mocha", "chai", "node"]
+      "types": ["node"],
+      "target": "ES2021",
+      "lib": ["ES2021", "DOM"],
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "outDir": "dist"
     },
     "include": ["src", "tests", "cli"],
     "typedocOptions": {
@@ -14,6 +20,6 @@
       "readme": "none",
       "externalPattern": ["**/node_modules/**"],
       "excludePrivate": true,
-      "out": "docs"
+      "out": "docs",
   }
 }  

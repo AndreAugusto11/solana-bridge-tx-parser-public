@@ -3,11 +3,14 @@
 import "mocha";
 import assert from "assert";
 
+import { hexToUint8Array } from "@mayanfinance/swap-sdk";
+import { ethers } from "ethers";
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
 import { ParsedAccount, ParsedIdlInstruction, SolanaParser, idl } from "../src";
-import { CHAIN_ID_SOLANA } from "../src/decoders/mayan/buffer";
-import { reconstructOrderHash } from "../src/decoders/mayan/decodeInitOrderParams";
+
+import { tryNativeToHexString } from "./buffer";
+import { CHAIN_ID_SOLANA } from "./buffer";
 
 const rpcConnection = new Connection(clusterApiUrl("mainnet-beta"));
 const parser = new SolanaParser([]);
@@ -152,21 +155,21 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const unlock = parsed?.find((pix) => pix.name === "fulfill") as ParsedIdlInstruction<idl.MayanIdl, "fulfill">;
+		const fulfill = parsed?.find((pix) => pix.name === "fulfill") as ParsedIdlInstruction<idl.MayanIdl, "fulfill">;
 
-		assert(unlock, "fulfill instruction not found");
+		assert(fulfill, "fulfill instruction not found");
 
 		console.log("--- test output ---");
 
-		console.log(`Parsed instruction name: ${unlock?.name}`);
+		console.log(`Parsed instruction name: ${fulfill?.name}`);
 		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-		console.log(`Accounts: ${unlock?.accounts.map((account) => stringifyAccount(account))}`);
-		console.log(`Data:`, unlock.args);
+		console.log(`Accounts: ${fulfill?.accounts.map((account) => stringifyAccount(account))}`);
+		console.log(`Data:`, fulfill.args);
 
-		console.log("Fulfill address:", Buffer.from(unlock.args.addrUnlocker).toString("hex"));
+		console.log("Fulfill address:", Buffer.from(fulfill.args.addrUnlocker).toString("hex"));
 
 		assert(
-			Buffer.from(unlock.args.addrUnlocker).toString("hex") === "000000000000000000000000cbb0cb4492afbcd9963441cc6aea50f35807ff96",
+			Buffer.from(fulfill.args.addrUnlocker).toString("hex") === "000000000000000000000000cbb0cb4492afbcd9963441cc6aea50f35807ff96",
 			"Fulfill address is not valid",
 		);
 	});
@@ -292,3 +295,94 @@ describe("Test parse transaction", () => {
 		assert(unlock.accounts[3].pubkey.toBase58() === "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "Mint account is not valid");
 	});
 });
+
+// SOME USEFUL UTILS FUNCTION
+
+export function reconstructOrderHash(
+	trader: string,
+	srcChainId: number,
+	tokenIn: string,
+	destChainId: number,
+	tokenOut: string,
+	minAmountOut64: bigint,
+	gasDrop64: bigint,
+	refundFeeDest64: bigint,
+	refundFeeSrc64: bigint,
+	deadline: number,
+	destAddr: string,
+	referrerAddr: string,
+	referrerBps: number,
+	mayanBps: number,
+	auctionMode: number,
+	random: string,
+): Buffer {
+	const writeBuffer = Buffer.alloc(239);
+	let offset = 0;
+
+	const trader32 = Buffer.from(tryNativeToUint8Array(trader, srcChainId));
+	writeBuffer.set(trader32, offset);
+	offset += 32;
+
+	writeBuffer.writeUInt16BE(srcChainId, offset);
+	offset += 2;
+
+	const tokenIn32 = Buffer.from(tryNativeToUint8Array(tokenIn, srcChainId));
+	writeBuffer.set(tokenIn32, offset);
+	offset += 32;
+
+	const destinationAddress32 = Buffer.from(tryNativeToUint8Array(destAddr, destChainId));
+	writeBuffer.set(destinationAddress32, offset);
+	offset += 32;
+
+	writeBuffer.writeUInt16BE(destChainId, offset);
+	offset += 2;
+
+	const tokenOut32 = Buffer.from(tryNativeToUint8Array(tokenOut, destChainId));
+	writeBuffer.set(tokenOut32, offset);
+	offset += 32;
+
+	writeBuffer.writeBigUInt64BE(minAmountOut64, offset);
+	offset += 8;
+
+	writeBuffer.writeBigUInt64BE(gasDrop64, offset);
+	offset += 8;
+
+	writeBuffer.writeBigUInt64BE(refundFeeDest64, offset);
+	offset += 8;
+
+	writeBuffer.writeBigUInt64BE(refundFeeSrc64, offset);
+	offset += 8;
+
+	const deadline64 = BigInt(deadline);
+	writeBuffer.writeBigUInt64BE(deadline64, offset);
+	offset += 8;
+
+	const referrerAddress32 = Buffer.from(tryNativeToUint8Array(referrerAddr, destChainId));
+	writeBuffer.set(referrerAddress32, offset);
+	offset += 32;
+
+	writeBuffer.writeUInt8(referrerBps, offset);
+	offset += 1;
+
+	writeBuffer.writeUInt8(mayanBps, offset);
+	offset += 1;
+
+	writeBuffer.writeUInt8(auctionMode, offset);
+	offset += 1;
+
+	const randomKey32 = Buffer.from(hexToUint8Array(random));
+	writeBuffer.set(randomKey32, offset);
+	offset += 32;
+
+	if (offset !== 239) {
+		throw new Error("Invalid offset");
+	}
+
+	const orderHash = ethers.keccak256(writeBuffer);
+
+	return Buffer.from(hexToUint8Array(orderHash));
+}
+
+export function tryNativeToUint8Array(address: string, chainId: number): Uint8Array {
+	return hexToUint8Array(tryNativeToHexString(address, chainId));
+}

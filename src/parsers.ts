@@ -32,6 +32,7 @@ import {
 	IdlParser,
 	UnknownInstruction,
 	EventNames,
+	ParsedTransaction,
 } from "./interfaces";
 import {
 	decodeSystemInstruction,
@@ -288,10 +289,44 @@ export class SolanaParser {
 		if (flatten) {
 			const flattened = flattenTransactionResponse(transaction);
 
+			flattened.map((ix) => this.parseInstruction(ix));
+
 			return flattened.map((ix) => this.parseInstruction(ix));
 		}
 
 		return this.parseTransactionData(transaction.transaction.message, transaction.meta?.loadedAddresses);
+	}
+
+	/**
+	 * Fetches tx from blockchain and parses it
+	 * @param connection web3 Connection
+	 * @param txId transaction id
+	 * @param flatten - true if CPI calls need to be parsed too
+	 * @returns list of parsed instructions
+	 */
+	async parseTransactionByHashV2(
+		connection: Connection,
+		txId: string,
+		flatten: boolean = false,
+		commitment: Finality = "confirmed",
+	): Promise<ParsedTransaction | null> {
+		const transaction = await connection.getTransaction(txId, { commitment: commitment, maxSupportedTransactionVersion: 0 });
+		if (!transaction) return null;
+		if (flatten) {
+			const flattened = flattenTransactionResponse(transaction);
+
+			flattened.map((ix) => this.parseInstruction(ix));
+
+			return {
+				transaction: transaction,
+				instructions: flattened.map((ix) => this.parseInstruction(ix)),
+			};
+		}
+
+		return {
+			transaction: transaction,
+			instructions: this.parseTransactionData(transaction.transaction.message, transaction.meta?.loadedAddresses),
+		};
 	}
 
 	/**

@@ -20,8 +20,6 @@ export enum MayanInstruction {
 function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInstruction<MayanIdl> {
 	const decoded = instruction.data[0];
 
-	console.log("Instruction ID:", decoded);
-
 	switch (decoded) {
 		case MayanInstruction.INIT_ORDER: {
 			return {
@@ -38,7 +36,11 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 					{ name: "tokenProgram", pubkey: instruction.keys[7].pubkey },
 					{ name: "systemProgram", pubkey: instruction.keys[8].pubkey },
 				],
-				args: decodeInitOrderParams(instruction.data.slice(1)), // Skip the first byte which is the instruction ID
+				args: decodeInitOrderParams(
+					instruction.data.slice(1),
+					instruction.keys[0].pubkey.toBase58(), // trader
+					instruction.keys[5].pubkey.toBase58(), // token
+				),
 			} as ParsedIdlInstruction<MayanIdl, "initOrder">;
 		}
 		case MayanInstruction.UNLOCK_BATCH: {
