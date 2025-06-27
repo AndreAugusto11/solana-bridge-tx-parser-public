@@ -1,3 +1,5 @@
+import "mocha";
+
 import { Connection, clusterApiUrl, TransactionInstruction, PublicKey } from "@solana/web3.js";
 import { assert } from "chai";
 
