@@ -43,9 +43,11 @@ import {
 	decodeMayanSwiftInstruction,
 } from "./decoders";
 import { compiledInstructionToInstruction, flattenTransactionResponse, parsedInstructionToInstruction, parseTransactionAccounts } from "./helpers";
+import { decodeMayanSwiftAuctionInstruction } from "./decoders/mayanSwiftAuction";
 
 const COMPUTE_BUDGET_PROGRAM_ID = new PublicKey("ComputeBudget111111111111111111111111111111");
-const MAYAN_PROGRAM_ID = new PublicKey("BLZRi6frs4X4DNLw56V4EXai1b6QVESN1BhHBTYM9VcY");
+const MAYAN_SWIFT_PROGRAM_ID = new PublicKey("BLZRi6frs4X4DNLw56V4EXai1b6QVESN1BhHBTYM9VcY");
+const MAYAN_SWIFT_AUCTION_PROGRAM_ID = new PublicKey("9w1D9okTM8xNE7Ntb7LpaAaoLc6LfU9nHFs2h2KTpX1H");
 
 function flattenIdlAccounts(accounts: IdlInstructionAccountItem2[], prefix?: string): IdlAccount[] {
 	return accounts
@@ -92,7 +94,8 @@ export class SolanaParser {
 			[TOKEN_2022_PROGRAM_ID.toBase58(), decodeToken2022Instruction],
 			[ASSOCIATED_TOKEN_PROGRAM_ID.toBase58(), decodeAssociatedTokenInstruction],
 			[COMPUTE_BUDGET_PROGRAM_ID.toBase58(), decodeComputeBudgetInstruction],
-			[MAYAN_PROGRAM_ID.toBase58(), decodeMayanSwiftInstruction],
+			[MAYAN_SWIFT_PROGRAM_ID.toBase58(), decodeMayanSwiftInstruction],
+			[MAYAN_SWIFT_AUCTION_PROGRAM_ID.toBase58(), decodeMayanSwiftAuctionInstruction],
 		];
 		let result: InstructionParsers;
 		parsers = parsers || [];

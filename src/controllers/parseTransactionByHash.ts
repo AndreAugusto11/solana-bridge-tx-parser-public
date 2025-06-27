@@ -6,7 +6,7 @@ import { SolanaParser } from "../parsers";
 const parser = new SolanaParser([]);
 
 // Create an item
-export const parseTransactionByHash = async (req: Request, res: Response, next: NextFunction) => {
+async function parseTransactionByHash(req: Request, res: Response, next: NextFunction) {
 	try {
 		const { rpcUrl, signature } = req.body;
 
@@ -33,4 +33,6 @@ export const parseTransactionByHash = async (req: Request, res: Response, next: 
 	} catch (error) {
 		next(error);
 	}
-};
+}
+
+export { parseTransactionByHash };

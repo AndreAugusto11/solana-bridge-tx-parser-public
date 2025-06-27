@@ -93,9 +93,9 @@ function decodeMayanSwiftInstruction(instruction: TransactionInstruction): Parse
 					{ name: "systemProgram", pubkey: instruction.keys[5].pubkey },
 				],
 				args: {
-					addrUnlocker: instruction.data.slice(8, 40),
+					addrUnlocker: Array.from(instruction.data.slice(8, 40)),
 				},
-			} as unknown as ParsedIdlInstruction<MayanSwiftIdl, "fulfill">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "fulfill">;
 		}
 		case MayanSwiftInstruction.SETTLE: {
 			return {
@@ -141,7 +141,9 @@ function decodeMayanSwiftInstruction(instruction: TransactionInstruction): Parse
 					{ name: "state", pubkey: instruction.keys[1].pubkey },
 					{ name: "systemProgram", pubkey: instruction.keys[2].pubkey },
 				],
-				args: decodeOrderInfo(remainingData),
+				args: {
+					args: decodeOrderInfo(remainingData),
+				},
 			} as ParsedIdlInstruction<MayanSwiftIdl, "registerOrder">;
 		}
 	}

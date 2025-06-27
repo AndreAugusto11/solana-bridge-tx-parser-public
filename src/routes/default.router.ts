@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
 
-import { parseTransactionByHash } from "../controllers/parseTransactionByHash";
+import { parseTransactionByHash } from "../controllers";
 
 const router = Router();
 

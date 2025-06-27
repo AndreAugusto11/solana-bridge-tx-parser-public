@@ -28,7 +28,7 @@ describe("Test parse transaction", () => {
 
 		console.log("Parsed transaction:", parsed);
 
-		const order = parsed?.find((pix) => pix.name === "unlockBatch") as ParsedIdlInstruction<idl.MayanIdl, "unlockBatch">;
+		const order = parsed?.find((pix) => pix.name === "unlockBatch") as ParsedIdlInstruction<idl.MayanSwiftIdl, "unlockBatch">;
 		console.log(`Data:`, order.args);
 	});
 });

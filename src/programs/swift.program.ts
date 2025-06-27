@@ -11,13 +11,13 @@ export declare type MayanSwift = {
 				{ name: "state"; isMut: true; isSigner: false },
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [102, 200, 238, 250, 214, 186, 74, 194];
+			discriminator: number[];
 			args: [{ name: "args"; type: { defined: { generics: []; name: "OrderInfo" } } }];
 		},
 		{
 			name: "setAuctionWinner";
 			accounts: [{ name: "state"; isMut: true; isSigner: false }, { name: "auction"; isMut: false; isSigner: false }];
-			discriminator: [122, 29, 95, 250, 212, 124, 111, 114];
+			discriminator: number[];
 			args: [{ name: "expectedWinner"; type: "pubkey" }];
 		},
 		{
@@ -35,7 +35,7 @@ export declare type MayanSwift = {
 				},
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [143, 2, 52, 206, 174, 164, 247, 72];
+			discriminator: number[];
 			args: [{ name: "addrUnlocker"; type: { array: ["u8", 32] } }];
 		},
 		{
@@ -70,7 +70,7 @@ export declare type MayanSwift = {
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 				{ name: "associatedTokenProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [175, 42, 185, 87, 144, 131, 102, 212];
+			discriminator: number[];
 			args: [];
 		},
 		{
@@ -87,7 +87,7 @@ export declare type MayanSwift = {
 				{ name: "clock"; isMut: false; isSigner: false },
 				{ name: "rent"; isMut: false; isSigner: false },
 			];
-			discriminator: [200, 203, 41, 203, 108, 225, 87, 202];
+			discriminator: number[];
 			args: [];
 		},
 		{
@@ -113,7 +113,7 @@ export declare type MayanSwift = {
 					isOptional: true;
 				},
 			];
-			discriminator: [232, 219, 223, 41, 219, 236, 220, 190];
+			discriminator: number[];
 			args: [{ name: "foreignFeeCollector"; type: { array: ["u8", 32] } }];
 		},
 		{
@@ -128,7 +128,7 @@ export declare type MayanSwift = {
 				},
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [98, 165, 201, 177, 108, 65, 206, 96];
+			discriminator: number[];
 			args: [];
 		},
 		{
@@ -144,7 +144,7 @@ export declare type MayanSwift = {
 				{ name: "tokenProgram"; isMut: false; isSigner: false },
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [127, 25, 227, 155, 173, 90, 45, 158];
+			discriminator: number[];
 			args: [{ name: "params"; type: { defined: { generics: []; name: "InitOrderParams" } } }];
 		},
 		{
@@ -159,7 +159,7 @@ export declare type MayanSwift = {
 				{ name: "tokenProgram"; isMut: false; isSigner: false },
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [234, 69, 121, 224, 197, 8, 154, 154];
+			discriminator: number[];
 			args: [{ name: "index"; type: "u16" }];
 		},
 		{
@@ -174,7 +174,7 @@ export declare type MayanSwift = {
 				{ name: "tokenProgram"; isMut: false; isSigner: false },
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [101, 155, 40, 21, 158, 189, 56, 203];
+			discriminator: number[];
 			args: [];
 		},
 		{
@@ -198,14 +198,14 @@ export declare type MayanSwift = {
 				{ name: "tokenProgram"; isMut: false; isSigner: false },
 				{ name: "systemProgram"; isMut: false; isSigner: false },
 			];
-			discriminator: [2, 96, 183, 251, 63, 208, 46, 46];
+			discriminator: number[];
 			args: [];
 		},
 	];
 	accounts: [
 		{
 			name: "SwiftDestSolanaState";
-			discriminator: [124, 172, 240, 168, 249, 92, 241, 163];
+			discriminator: number[];
 			type: {
 				kind: "struct";
 				fields: [
@@ -220,7 +220,7 @@ export declare type MayanSwift = {
 		},
 		{
 			name: "SwiftSourceSolanaState";
-			discriminator: [107, 149, 204, 128, 198, 155, 3, 162];
+			discriminator: number[];
 			type: {
 				kind: "struct";
 				fields: [{ name: "bump"; type: "u8" }, { name: "status"; type: { defined: "SwiftSourceSolanaStatus" } }];
@@ -242,7 +242,7 @@ export declare type MayanSwift = {
 					{ name: "seqMsg"; type: "u64" },
 				];
 			};
-			discriminator: [252, 227, 205, 147, 72, 64, 250, 126];
+			discriminator: number[];
 		},
 	];
 	types: [
@@ -348,7 +348,7 @@ export declare type MayanSwift = {
 	events: [
 		{
 			name: "OrderInitialized";
-			discriminator: [180, 118, 44, 249, 166, 25, 40, 81];
+			discriminator: number[];
 		},
 	];
 	errors: [

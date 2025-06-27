@@ -1,9 +1,9 @@
 import BN from "bn.js";
 
-import { ParsedIdlArgs } from "../../interfaces";
+import { ParsedIdlType } from "../../interfaces";
 import { idl } from "../..";
 
-export function decodeOrderInfo(data: Buffer): ParsedIdlArgs<idl.MayanSwiftIdl, "registerOrder"> {
+export function decodeOrderInfo(data: Buffer): ParsedIdlType<idl.MayanSwiftIdl, "OrderInfo"> {
 	let offset = 7;
 
 	const trader = data.slice(offset, offset + 32);
@@ -55,23 +55,21 @@ export function decodeOrderInfo(data: Buffer): ParsedIdlArgs<idl.MayanSwiftIdl, 
 	offset += 32;
 
 	return {
-		args: {
-			trader: Array.from(trader),
-			chainSource,
-			tokenIn: Array.from(tokenIn),
-			addrDest: Array.from(addrDest),
-			chainDest,
-			tokenOut: Array.from(tokenOut),
-			amountOutMin: new BN(amountOutMin.toString()),
-			gasDrop: new BN(gasDrop.toString()),
-			feeCancel: new BN(feeCancel.toString()),
-			feeRefund: new BN(feeRefund.toString()),
-			deadline: new BN(deadline.toString()),
-			addrRef: Array.from(addrRef),
-			feeRateRef,
-			feeRateMayan,
-			auctionMode,
-			keyRnd: Array.from(keyRnd),
-		},
+		trader: Array.from(trader),
+		chainSource,
+		tokenIn: Array.from(tokenIn),
+		addrDest: Array.from(addrDest),
+		chainDest,
+		tokenOut: Array.from(tokenOut),
+		amountOutMin: new BN(amountOutMin.toString()),
+		gasDrop: new BN(gasDrop.toString()),
+		feeCancel: new BN(feeCancel.toString()),
+		feeRefund: new BN(feeRefund.toString()),
+		deadline: new BN(deadline.toString()),
+		addrRef: Array.from(addrRef),
+		feeRateRef,
+		feeRateMayan,
+		auctionMode,
+		keyRnd: Array.from(keyRnd),
 	};
 }
