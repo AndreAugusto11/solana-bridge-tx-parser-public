@@ -41,7 +41,7 @@
     "test:custom": "mocha -r ts-node/register -b -t 200000 ./tests/customParser.test.ts",
     "test:parseLogs": "mocha -r ts-node/register -b -t 200000 ./tests/parseLogs.test.ts",
     "test:convertIdl": "mocha -r ts-node/register -b -t 200000 ./tests/convertIdl.test.ts",
-    "test:mayan": "mocha -r ts-node/register -b -t 200000 ./tests/parseMayanTransaction.test.ts",
+    "test:mayanSwift": "mocha -r ts-node/register -b -t 200000 ./tests/parseMayanSwiftTransaction.test.ts",
     "prettify": "prettier --write ./**/*.ts",
     "lint": "eslint --config .eslintrc \"./{src,tests}/**/*.{js,ts}\"",
     "lint:fix": "eslint --config .eslintrc \"./{src,tests}/**/*.{js,ts}\" --fix",

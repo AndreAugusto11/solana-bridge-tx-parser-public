@@ -3,7 +3,7 @@ import { BN } from "bn.js";
 import { ParsedIdlArgs } from "../../interfaces";
 import { idl } from "../../../src";
 
-export function decodeInitOrderParams(data: Buffer, trader: string, token: string): ParsedIdlArgs<idl.MayanIdl, "initOrder"> {
+export function decodeInitOrderParams(data: Buffer, trader: string, token: string): ParsedIdlArgs<idl.MayanSwiftIdl, "initOrder"> {
 	let offset = 7;
 
 	const amountInMin = data.readBigUInt64LE(offset);

@@ -1,12 +1,12 @@
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 
 import { ParsedInstruction, ParsedIdlInstruction } from "../interfaces";
-import { MayanIdl } from "../programs";
+import { MayanSwiftIdl } from "../programs";
 
 import { decodeInitOrderParams } from "./mayan/decodeInitOrderParams";
 import { decodeOrderInfo } from "./mayan/decodeOrderInfo";
 
-export enum MayanInstruction {
+export enum MayanSwiftInstruction {
 	REGISTER_ORDER = 92,
 	SET_AUCTION_WINNER = 63,
 	FULFILL_ORDER = 143,
@@ -17,11 +17,12 @@ export enum MayanInstruction {
 	REFUND = 10,
 }
 
-function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInstruction<MayanIdl> {
-	const decoded = instruction.data[0];
+function decodeMayanSwiftInstruction(instruction: TransactionInstruction): ParsedInstruction<MayanSwiftIdl> {
+	const instructionSelector = instruction.data[0]; // First byte is the instruction selector
+	const remainingData = instruction.data.slice(1); // Remaining data after the selector
 
-	switch (decoded) {
-		case MayanInstruction.INIT_ORDER: {
+	switch (instructionSelector) {
+		case MayanSwiftInstruction.INIT_ORDER: {
 			return {
 				name: "initOrder",
 				programId: instruction.programId,
@@ -37,13 +38,13 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 					{ name: "systemProgram", pubkey: instruction.keys[8].pubkey },
 				],
 				args: decodeInitOrderParams(
-					instruction.data.slice(1),
+					remainingData,
 					instruction.keys[0].pubkey.toBase58(), // trader
 					instruction.keys[5].pubkey.toBase58(), // token
 				),
-			} as ParsedIdlInstruction<MayanIdl, "initOrder">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "initOrder">;
 		}
-		case MayanInstruction.UNLOCK_BATCH: {
+		case MayanSwiftInstruction.UNLOCK_BATCH: {
 			return {
 				name: "unlockBatch",
 				programId: instruction.programId,
@@ -60,9 +61,9 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 				args: {
 					index: instruction.data.readInt16LE(1),
 				},
-			} as ParsedIdlInstruction<MayanIdl, "unlockBatch">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "unlockBatch">;
 		}
-		case MayanInstruction.UNLOCK: {
+		case MayanSwiftInstruction.UNLOCK: {
 			return {
 				name: "unlock",
 				programId: instruction.programId,
@@ -77,9 +78,9 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 					{ name: "systemProgram", pubkey: instruction.keys[7].pubkey },
 				],
 				args: {},
-			} as ParsedIdlInstruction<MayanIdl, "unlock">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "unlock">;
 		}
-		case MayanInstruction.FULFILL_ORDER: {
+		case MayanSwiftInstruction.FULFILL_ORDER: {
 			return {
 				name: "fulfill",
 				programId: instruction.programId,
@@ -94,9 +95,9 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 				args: {
 					addrUnlocker: instruction.data.slice(8, 40),
 				},
-			} as unknown as ParsedIdlInstruction<MayanIdl, "fulfill">;
+			} as unknown as ParsedIdlInstruction<MayanSwiftIdl, "fulfill">;
 		}
-		case MayanInstruction.SETTLE: {
+		case MayanSwiftInstruction.SETTLE: {
 			return {
 				name: "settle",
 				programId: instruction.programId,
@@ -116,9 +117,9 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 					{ name: "associatedTokenProgram", pubkey: instruction.keys[12].pubkey },
 				],
 				args: {},
-			} as ParsedIdlInstruction<MayanIdl, "settle">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "settle">;
 		}
-		case MayanInstruction.SET_AUCTION_WINNER: {
+		case MayanSwiftInstruction.SET_AUCTION_WINNER: {
 			return {
 				name: "setAuctionWinner",
 				programId: instruction.programId,
@@ -129,9 +130,9 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 				args: {
 					expectedWinner: new PublicKey(instruction.data.slice(8, 40)),
 				},
-			} as ParsedIdlInstruction<MayanIdl, "setAuctionWinner">;
+			} as ParsedIdlInstruction<MayanSwiftIdl, "setAuctionWinner">;
 		}
-		case MayanInstruction.REGISTER_ORDER: {
+		case MayanSwiftInstruction.REGISTER_ORDER: {
 			return {
 				name: "registerOrder",
 				programId: instruction.programId,
@@ -140,8 +141,8 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 					{ name: "state", pubkey: instruction.keys[1].pubkey },
 					{ name: "systemProgram", pubkey: instruction.keys[2].pubkey },
 				],
-				args: decodeOrderInfo(instruction.data.slice(1)),
-			} as ParsedIdlInstruction<MayanIdl, "registerOrder">;
+				args: decodeOrderInfo(remainingData),
+			} as ParsedIdlInstruction<MayanSwiftIdl, "registerOrder">;
 		}
 	}
 
@@ -155,7 +156,7 @@ function decodeMayanInstruction(instruction: TransactionInstruction): ParsedInst
 		})),
 		args: {},
 		programId: instruction.programId,
-	} as unknown as ParsedIdlInstruction<MayanIdl, "refund">;
+	} as unknown as ParsedIdlInstruction<MayanSwiftIdl, "refund">;
 }
 
-export { decodeMayanInstruction };
+export { decodeMayanSwiftInstruction };

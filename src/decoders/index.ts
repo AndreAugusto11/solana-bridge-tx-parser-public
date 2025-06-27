@@ -3,7 +3,7 @@ import { decodeTokenInstruction } from "./token";
 import { decodeToken2022Instruction } from "./token22";
 import { decodeAssociatedTokenInstruction } from "./associated";
 import { decodeComputeBudgetInstruction } from "./compute.budget";
-import { decodeMayanInstruction } from "./mayan";
+import { decodeMayanSwiftInstruction } from "./mayanSwift";
 
 export {
 	decodeSystemInstruction,
@@ -11,5 +11,5 @@ export {
 	decodeToken2022Instruction,
 	decodeAssociatedTokenInstruction,
 	decodeComputeBudgetInstruction,
-	decodeMayanInstruction,
+	decodeMayanSwiftInstruction,
 };

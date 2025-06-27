@@ -3,7 +3,7 @@ import BN from "bn.js";
 import { ParsedIdlArgs } from "../../interfaces";
 import { idl } from "../..";
 
-export function decodeOrderInfo(data: Buffer): ParsedIdlArgs<idl.MayanIdl, "registerOrder"> {
+export function decodeOrderInfo(data: Buffer): ParsedIdlArgs<idl.MayanSwiftIdl, "registerOrder"> {
 	let offset = 7;
 
 	const trader = data.slice(offset, offset + 32);

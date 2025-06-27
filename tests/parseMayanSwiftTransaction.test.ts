@@ -41,7 +41,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const order = parsed?.find((pix) => pix.name === "initOrder") as ParsedIdlInstruction<idl.MayanIdl, "initOrder">;
+		const order = parsed?.find((pix) => pix.name === "initOrder") as ParsedIdlInstruction<idl.MayanSwiftIdl, "initOrder">;
 
 		assert(order, "Order instruction not found");
 
@@ -103,7 +103,7 @@ describe("Test parse transaction", () => {
 		console.log("Parsed transaction:", parsed);
 
 		// we can find instruction by name
-		const unlockBatch = parsed?.find((pix) => pix.name === "unlockBatch") as ParsedIdlInstruction<idl.MayanIdl, "unlockBatch">;
+		const unlockBatch = parsed?.find((pix) => pix.name === "unlockBatch") as ParsedIdlInstruction<idl.MayanSwiftIdl, "unlockBatch">;
 
 		assert(unlockBatch, "UnlockBatch instruction not found");
 
@@ -129,7 +129,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const settle = parsed?.find((pix) => pix.name === "settle") as ParsedIdlInstruction<idl.MayanIdl, "settle">;
+		const settle = parsed?.find((pix) => pix.name === "settle") as ParsedIdlInstruction<idl.MayanSwiftIdl, "settle">;
 
 		assert(settle, "settle instruction not found");
 
@@ -155,7 +155,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const fulfill = parsed?.find((pix) => pix.name === "fulfill") as ParsedIdlInstruction<idl.MayanIdl, "fulfill">;
+		const fulfill = parsed?.find((pix) => pix.name === "fulfill") as ParsedIdlInstruction<idl.MayanSwiftIdl, "fulfill">;
 
 		assert(fulfill, "fulfill instruction not found");
 
@@ -188,7 +188,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const auctionWinner = parsed?.find((pix) => pix.name === "setAuctionWinner") as ParsedIdlInstruction<idl.MayanIdl, "setAuctionWinner">;
+		const auctionWinner = parsed?.find((pix) => pix.name === "setAuctionWinner") as ParsedIdlInstruction<idl.MayanSwiftIdl, "setAuctionWinner">;
 
 		assert(auctionWinner, "setAuctionWinner instruction not found");
 
@@ -218,7 +218,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const registerOrder = parsed?.find((pix) => pix.name === "registerOrder") as ParsedIdlInstruction<idl.MayanIdl, "registerOrder">;
+		const registerOrder = parsed?.find((pix) => pix.name === "registerOrder") as ParsedIdlInstruction<idl.MayanSwiftIdl, "registerOrder">;
 
 		assert(registerOrder, "registerOrder instruction not found");
 
@@ -280,7 +280,7 @@ describe("Test parse transaction", () => {
 		}
 
 		// we can find instruction by name
-		const unlock = parsed?.find((pix) => pix.name === "unlock") as ParsedIdlInstruction<idl.MayanIdl, "unlock">;
+		const unlock = parsed?.find((pix) => pix.name === "unlock") as ParsedIdlInstruction<idl.MayanSwiftIdl, "unlock">;
 
 		assert(unlock, "unlock instruction not found");
 

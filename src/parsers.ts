@@ -40,7 +40,7 @@ import {
 	decodeToken2022Instruction,
 	decodeAssociatedTokenInstruction,
 	decodeComputeBudgetInstruction,
-	decodeMayanInstruction,
+	decodeMayanSwiftInstruction,
 } from "./decoders";
 import { compiledInstructionToInstruction, flattenTransactionResponse, parsedInstructionToInstruction, parseTransactionAccounts } from "./helpers";
 
@@ -92,7 +92,7 @@ export class SolanaParser {
 			[TOKEN_2022_PROGRAM_ID.toBase58(), decodeToken2022Instruction],
 			[ASSOCIATED_TOKEN_PROGRAM_ID.toBase58(), decodeAssociatedTokenInstruction],
 			[COMPUTE_BUDGET_PROGRAM_ID.toBase58(), decodeComputeBudgetInstruction],
-			[MAYAN_PROGRAM_ID.toBase58(), decodeMayanInstruction],
+			[MAYAN_PROGRAM_ID.toBase58(), decodeMayanSwiftInstruction],
 		];
 		let result: InstructionParsers;
 		parsers = parsers || [];

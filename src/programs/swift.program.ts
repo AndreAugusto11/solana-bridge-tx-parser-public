@@ -1,4 +1,4 @@
-export declare type Mayan = {
+export declare type MayanSwift = {
 	version: "0.1.0";
 	name: "swift";
 	address: "BLZRi6frs4X4DNLw56V4EXai1b6QVESN1BhHBTYM9VcY";
