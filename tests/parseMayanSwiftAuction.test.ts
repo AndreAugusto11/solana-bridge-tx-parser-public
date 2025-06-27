@@ -2,9 +2,11 @@ import "mocha";
 
 import assert from "assert";
 
-import { Connection, clusterApiUrl } from "@solana/web3.js";
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
 import { idl, ParsedIdlInstruction, SolanaParser } from "../src";
+
+import { reconstructOrderHash } from "./buffer";
 
 const rpcConnection = new Connection(clusterApiUrl("mainnet-beta"));
 const parser = new SolanaParser([]);
@@ -20,7 +22,7 @@ describe("Test parse transaction", () => {
 	it("can parse bid tx", async () => {
 		const parsed = await parser.parseTransactionByHash(
 			rpcConnection,
-			"Ahy9GEyiPzkrw54Js6rw43bD6m6V3zmDDK6nn6e8N2tskrbkiozhsMjcdBLvCgH5JAc8CFyUZiwWpyCNqQ4wmQb",
+			"4QPyaZXbQGVhwQagBAeLkaGZKZqrQtw7kfssae7fd3yeH1dPeqTRvf5y98KmHHpERge9APo4qfUiDyN6j8cWDuZm",
 			true,
 		);
 
@@ -47,9 +49,42 @@ describe("Test parse transaction", () => {
 		assert(bid.accounts[2].name === "auctionState", "Third account should be auctionState");
 		assert(bid.accounts[3].name === "systemProgram", "Fourth account should be systemProgram");
 
-		assert(Number(bid?.args.amountBid) == 249597990021, "Amount bid should be 249597990021");
-		assert(Number(bid.args.order.deadline) == 1751021714, "Order deadline should be 1735680000");
-		assert(Number(bid.args.order.feeCancel) == 7903, "Order feeCancel should be 7903");
+		assert(bid.accounts[0].pubkey.toBase58() === "93boUvm9QnkHTa5sUGMuFegLaxYsJQVMrNCAz7HojnY5", "Config account pubkey should match");
+		assert(bid.accounts[1].pubkey.toBase58() === "GnWFhrfgciKVoqgAqarwWEQ79NuD2LnRd9EEYaB1kUoc", "Driver account pubkey should match");
+		assert(bid.accounts[2].pubkey.toBase58() === "4sECnQ7LK4KAm3VYcuf3ERCT738xrraXHwfE9tpPUNkD", "Auction state account pubkey should match");
+		assert(bid.accounts[3].pubkey.toBase58() === "11111111111111111111111111111111", "System program account pubkey should match");
+		console.log(Number(bid?.args.amountBid));
+
+		assert(Number(bid?.args.amountBid) == 1655996714, "Amount bid should be 1655996714");
+		assert(Number(bid.args.order.deadline) == 1748879633, "Order deadline should be 1748879633");
+		assert(Number(bid.args.order.feeCancel) == 23817, "Order feeCancel should be 23817");
+
+		const orderHash = reconstructOrderHash(
+			`0x${Buffer.from(bid.args.order.trader).toString("hex").slice(24)}`,
+			bid.args.order.chainSource,
+			`0x${Buffer.from(bid.args.order.tokenIn).toString("hex").slice(24)}`,
+			bid.args.order.chainDest,
+			new PublicKey(bid.args.order.tokenOut).toBase58(),
+			BigInt(bid.args.order.amountOutMin.toString()),
+			BigInt(bid.args.order.gasDrop.toString()),
+			BigInt(bid.args.order.feeCancel.toString()),
+			BigInt(bid.args.order.feeRefund.toString()),
+			Number(bid.args.order.deadline),
+			new PublicKey(bid.args.order.addrDest).toBase58(),
+			new PublicKey(bid.args.order.addrRef).toBase58(),
+			bid.args.order.feeRateRef,
+			bid.args.order.feeRateMayan,
+			bid.args.order.auctionMode,
+			Buffer.from(bid.args.order.keyRnd).toString("hex"),
+		);
+
+		console.log(`Order hash: ${orderHash}`);
+		console.log("Order Hash (hex):", Buffer.from(orderHash).toString("hex"));
+
+		assert(
+			Buffer.from(orderHash).toString("hex") === "7ea702feda6f287d1f4a448738ab57e5052a05c62fabd5887bbfe6842c6670f0",
+			"Order hash should match expected value",
+		);
 	});
 
 	// the next test is very weird, the trader is always the same and the tokens are refunded -- not filled in the other blockchain
