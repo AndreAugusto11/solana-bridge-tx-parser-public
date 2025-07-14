@@ -9,6 +9,7 @@ import { decodeOrderInfo } from "./mayan/decodeOrderInfo";
 export enum MayanSwiftAuctionInstruction {
 	BID = 199,
 	POST_AUCTION = 62,
+	POST_AUCTION_OLD = 82,
 	CLOSE_AUCTION = 225,
 }
 
@@ -16,19 +17,34 @@ function decodeMayanSwiftAuctionInstruction(instruction: TransactionInstruction)
 	const instructionSelector = instruction.data[0];
 	const remainingData = instruction.data.slice(1);
 
+	let parsed: ParsedIdlInstruction<MayanSwiftAuction> | null;
+
 	switch (instructionSelector) {
 		case MayanSwiftAuctionInstruction.BID:
-			return decodeBidInstruction(instruction, remainingData);
+			parsed = decodeBidInstruction(instruction, remainingData);
+			break;
 
 		case MayanSwiftAuctionInstruction.POST_AUCTION:
-			return decodePostAuctionInstruction(instruction, remainingData);
+			parsed = decodePostAuctionInstruction(instruction, remainingData);
+			break;
 
 		case MayanSwiftAuctionInstruction.CLOSE_AUCTION:
-			return decodeCloseAuctionInstruction(instruction);
+			parsed = decodeCloseAuctionInstruction(instruction);
+			break;
 
-		default:
-			throw new Error(`Unknown instruction selector: ${instructionSelector}`);
+		default: {
+			parsed = null;
+		}
 	}
+
+	return parsed
+		? parsed
+		: {
+				programId: instruction.programId,
+				name: "unknown",
+				accounts: instruction.keys,
+				args: { unknown: instruction.data },
+			};
 }
 
 export { decodeMayanSwiftAuctionInstruction };

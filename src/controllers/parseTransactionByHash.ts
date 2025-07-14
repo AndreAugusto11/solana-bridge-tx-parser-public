@@ -5,12 +5,10 @@ import { SolanaParser } from "../parsers";
 
 const parser = new SolanaParser([]);
 
-// Create an item
 async function parseTransactionByHash(req: Request, res: Response, next: NextFunction) {
 	try {
 		const { rpcUrl, signature } = req.body;
 
-		// console.log("Rpc URL:", rpcUrl);
 		console.log("Decoding transaction with signature:", signature);
 
 		if (!rpcUrl || !signature) {
@@ -18,6 +16,7 @@ async function parseTransactionByHash(req: Request, res: Response, next: NextFun
 		}
 
 		if (!process.env.SOLANA_RPC_URL) {
+			console.log("SOLANA_RPC_URL is not set in environment variables");
 			return res.status(500).json({ error: "SOLANA_RPC_URL is not set in environment variables" });
 		}
 
