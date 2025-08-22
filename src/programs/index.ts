@@ -7,6 +7,8 @@ import { SplToken22 } from "./spl-token-22.program";
 import { MayanSwift } from "./swift.program";
 import { MayanSwiftAuction } from "./swift.auction.program";
 import { Jupiter } from "./jupiter_v6";
+import { DlnDst } from "./debridge-dst";
+import { DlnSrc } from "./debridge-src";
 
 export type SplTokenIdl = ReturnType<typeof splTokenProgram>["idl"];
 export type SystemProgramIdl = SystemProgram;
@@ -16,3 +18,5 @@ export type AssociatedTokenProgramIdl = AssociatedTokenProgram;
 export type JupiterIdl = Jupiter;
 export type MayanSwiftIdl = MayanSwift;
 export type MayanSwiftAuctionIdl = MayanSwiftAuction;
+export type DeBridgeDestinationIdl = DlnDst;
+export type DeBridgeSourceIdl = DlnSrc;
